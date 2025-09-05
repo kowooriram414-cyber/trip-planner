@@ -1,0 +1,13 @@
+📄 .gitignore```
+Python
+pycache/
+*.pyc
+*.pyo
+*.pyd
+Environment
+.env
+venv/
+env/
+Database
+*.db
+*.sqlite3

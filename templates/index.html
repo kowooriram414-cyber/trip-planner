@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👨‍👩‍👧‍👦 우리 가족 남프랑스 여행 계획 🇫🇷</title>
+    <style>
+      body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; line-height: 1.6; background-color: #f9f9f9; color: #333; margin: 0; padding: 12px; }
+      .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+      h1 { color: #2c3e50; text-align: center; font-size: 1.8em; margin-bottom: 20px; }
+      h2 { color: #34495e; border-bottom: 2px solid #4a90e2; padding-bottom: 5px; margin-top: 20px; font-size: 1.4em; }
+      .tabs { display: flex; flex-wrap: wrap; border-bottom: 2px solid #ddd; margin-bottom: 20px; }
+      .tab-button { background-color: #f1f1f1; border: none; outline: none; cursor: pointer; padding: 14px 16px; transition: 0.3s; font-size: 1em; border-radius: 8px 8px 0 0; margin-right: 5px; -webkit-tap-highlight-color: transparent; }
+      .tab-button:hover { background-color: #ddd; }
+      .tab-button.active { background-color: #4a90e2; color: white; }
+      .tab-content { display: none; padding: 10px; border-top: none; animation: fadeIn 0.5s; }
+      .tab-content.active { display: block; }
+      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+      ul { list-style-type: none; padding-left: 0; }
+      li { margin-bottom: 10px; padding: 10px; background-color: #f8f9fa; border-left: 4px solid #4a90e2; }
+      .editable-plan { border: 1px dashed #aed6f1; padding: 15px; border-radius: 5px; background-color: #ffffff; min-height: 200px; }
+      .info-box[contenteditable="true"] { border-style: dashed; }
+      .editable-plan:hover, .editable-plan:focus-within, 
+      .info-box[contenteditable="true"]:hover, .info-box[contenteditable="true"]:focus-within { 
+          background-color: #fef9e7; border-color: #f7dc6f; outline: none; 
+      }
+      .info-box { background-color: #eaf2f8; border: 1px solid #aed6f1; padding: 15px; border-radius: 8px; margin-top: 15px; }
+      .info-box p { margin: 8px 0; }
+      .info-box strong { color: #2980b9; }
+      .expense-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+      .expense-table th, .expense-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+      .expense-table th { background-color: #4a90e2; color: white; }
+      .expense-table input, .expense-table select { width: 95%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; }
+      .add-btn { background-color: #2ecc71; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; margin-top: 10px; }
+      .add-btn:hover { background-color: #27ae60; }
+      .summary { margin-top: 25px; padding: 20px; background-color: #f2f2f2; border-radius: 8px; }
+      .summary h3 { margin-top: 0; }
+      #total-expenses, #category-totals span { font-weight: bold; font-size: 1.1em; }
+      .delete-btn { background-color: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+      .delete-btn:hover { background-color: #c0392b; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>👨‍👩‍👧‍👦 우리 가족 남프랑스 여행 🇫🇷</h1>
+    <p style="text-align:center;">🗓️ 2025.09.30 ~ 2025.10.12</p>
+    <div class="tabs" id="tab-container">
+        <button class="tab-button active" data-tab="day1">10/1(수)</button>
+        <button class="tab-button" data-tab="day2">10/2(목)</button>
+        <button class="tab-button" data-tab="day3">10/3(금)</button>
+        <button class="tab-button" data-tab="day4">10/4(토)</button>
+        <button class="tab-button" data-tab="day5">10/5(일)</button>
+        <button class="tab-button" data-tab="day6">10/6(월)</button>
+        <button class="tab-button" data-tab="day7">10/7(화)</button>
+        <button class="tab-button" data-tab="day8">10/8(수)</button>
+        <button class="tab-button" data-tab="day9">10/9(목)</button>
+        <button class="tab-button" data-tab="day10">10/10(금)</button>
+        <button class="tab-button" data-tab="day11">10/11(토)</button>
+        <button class="tab-button" data-tab="day12">10/12(일)</button>
+        <button class="tab-button" data-tab="expenses">💰 여행 경비</button>
+    </div>
+    
+    {% macro get_plan_content(day_id) %}
+        {% for plan in plans if plan.day_id == day_id %}{{ plan.content|safe }}{% else %}<ul><li>여기에 계획을 입력하세요...</li></ul>{% endfor %}
+    {% endmacro %}
+    
+    {% macro get_infobox_content(box_id, default_content) %}
+        {% for box in infoboxes if box.box_id == box_id %}{{ box.content|safe }}{% else %}{{ default_content|safe }}{% endfor %}
+    {% endmacro %}
+
+      <!-- Day 1 -->
+      <div id="day1" class="tab-content active">
+        <h2>1️⃣일차: 니스 니스 니스!</h2>
+        <div id="infobox-day1-top" class="info-box" contenteditable="true">{{ get_infobox_content('infobox-day1-top', "<p>🏨 <strong>숙소:</strong> 41 Avenue Georges Clemenceau, Nice, ...</p><p>⚠️ <strong>체크인:</strong> 오후 3시 (짐 사전 보관 가능)</p>") }}</div>
+        <div class="editable-plan" contenteditable="true">{{ get_plan_content('day1') }}</div>
+        <div id="infobox-day1-bottom" class="info-box" contenteditable="true">{{ get_infobox_content('infobox-day1-bottom', "<p>✅ <strong>예약 내역:</strong> chez acchiardo (19:15 예약 완료)</p><p>📝 <strong>주의할 점:</strong> 소매치기 조심, 컨디션 조절 잘하기!</p>") }}</div>
+      </div>
+      <!-- Day 2 -->
+      <div id="day2" class="tab-content">
+        <h2>2️⃣일차: 모나코 & 니스</h2>
+        <div id="infobox-day2-top" class="info-box" contenteditable="true">{{ get_infobox_content('infobox-day2-top', "<p>🏨 <strong>숙소:</strong> 니스 숙소</p>") }}</div>
+        <div class="editable-plan" contenteditable="true">{{ get_plan_content('day2') }}</div>
+        <div id="infobox-day2-bottom" class="info-box" contenteditable="true">{{ get_infobox_content('infobox-day2-bottom', "<p>✅ <strong>예약 내역:</strong> JAN (미슐랭)</p>") }}</div>
+      </div>
+      <!-- Day 3 -->
+      <div id="day3" class="tab-content">
+        <h2>3️⃣일차: 니스, 에제, 생장캅페라</h2>
+        <div id="infobox-day3-top" class="info-box" contenteditable="true">{{ get_infobox_content('infobox-day3-top', "<p>🏨 <strong>숙소:</strong> 니스 숙소</p>") }}</div>
+        <div class="editable-plan" contenteditable="true">{{ get_plan_content('day3') }}</div>
+      </div>
+      <!-- Day 4 -->
+      <div id="day4" class="tab-content">
+        <h2>4️⃣일차: 니스 & 멍통</h2>
+        <div id="infobox-day4-top" class="info-box" contenteditable="true">{{ get_infobox_content('infobox-day4-top', "<p>🏨 <strong>숙소:</strong> 41 Avenue Georges Clemenceau, Nice, ...</p>") }}</div>
+        <div class="editable-plan" contenteditable="true">{{ get_plan_content('day4') }}</div>
+        <div id="infobox-day4-bottom" class="info-box" contenteditable="true">{{ get_infobox_content('infobox-day4-bottom', "<p>✅ <strong>예약 필요:</strong> Bocca nissa (예약 필수)</p>") }}</div>
+      </div>
+      <!-- Day 5 -->
+      <div id="day5" class="tab-content">
+        <h2>5️⃣일차: 니스 → 생트로페</h2>
+        <div id="infobox-day5-top" class="info-box" contenteditable="true">{{ get_infobox_content('infobox-day5-top', "<p>🏨 <strong>숙소 이동:</strong> 25 Avenue Paul Roussel, Saint-Tropez, ...</p><p>⚠️ <strong>참고사항:</strong> ...</p><p>📝 <strong>확인 필요:</strong> ...</p>") }}</div>
+        <div class="editable-plan" contenteditable="true">{{ get_plan_content('day5') }}</div>
+      </div>
+      <!-- Day 6 -->
+      <div id="day6" class="tab-content">
+        <h2>6️⃣일차: 생트로페 완전정복</h2>
+        <div id="infobox-day6-top" class="info-box" contenteditable="true">{{ get_infobox_content('infobox-day6-top', "<p>🏨 <strong>숙소:</strong> 25 Avenue Paul Roussel, Saint-Tropez, ...</p>") }}</div>
+        <div class="editable-plan" contenteditable="true">{{ get_plan_content('day6') }}</div>
+        <div id="infobox-day6-bottom" class="info-box" contenteditable="true">{{ get_infobox_content('infobox-day6-bottom', "<p>📝 <strong>팁:</strong> ...일몰 시간에 맞춰 저녁 예약하기</p>") }}</div>
+      </div>
+      <!-- Day 7 -->
+      <div id="day7" class="tab-content">
+        <h2>7️⃣일차: 생트로페 → 와이너리 → 엑상프로방스</h2>
+        <div id="infobox-day7-top" class="info-box" contenteditable="true">{{ get_infobox_content('infobox-day7-top', "<p>🏨 <strong>숙소 이동:</strong> 6 Avenue Robert Schuman, Aix-en-Provence, ...</p><p>⚠️ <strong>참고사항:</strong> ...</p>") }}</div>
+        <div class="editable-plan" contenteditable="true">{{ get_plan_content('day7') }}</div>
+      </div>
+      <!-- Day 8 -->
+      <div id="day8" class="tab-content">
+        <h2>8️⃣일차: 베르동 협곡 & 무스티에 생트 마리</h2>
+        <div id="infobox-day8-top" class="info-box" contenteditable="true">{{ get_infobox_content('infobox-day8-top', "<p>🏨 <strong>숙소:</strong> 6 Avenue Robert Schuman, Aix-en-Provence, ...</p>") }}</div>
+        <div class="editable-plan" contenteditable="true">{{ get_plan_content('day8') }}</div>
+      </div>
+      <!-- Day 9 -->
+      <div id="day9" class="tab-content">
+        <h2>9️⃣일차: 아울렛 쇼핑 & 리옹으로 이동</h2>
+        <div id="infobox-day9-top" class="info-box" contenteditable="true">{{ get_infobox_content('infobox-day9-top', "<p>🏨 <strong>숙소 이동:</strong> 50b Cours Emile Zola, Villeurbanne, ...</p><p>⚠️ <strong>참고사항:</strong> ...</p>") }}</div>
+        <div class="editable-plan" contenteditable="true">{{ get_plan_content('day9') }}</div>
+        <div id="infobox-day9-bottom" class="info-box" contenteditable="true">{{ get_infobox_content('infobox-day9-bottom', "<p>📝 <strong>팁:</strong> Les Halles de Lyon Paul Bocuse는 미식의 전당...</p>") }}</div>
+      </div>
+      <!-- Day 10 -->
+      <div id="day10" class="tab-content">
+        <h2>🔟일차: 리옹, 샤모니</h2>
+        <div id="infobox-day10-top" class="info-box" contenteditable="true">{{ get_infobox_content('infobox-day10-top', "<p>🏨 <strong>숙소:</strong> 422 Avenue de la Plage, Chamonix, ...</p><p>⚠️ <strong>참고사항:</strong> ...</p>") }}</div>
+        <div class="editable-plan" contenteditable="true">{{ get_plan_content('day10') }}</div>
+        <div id="infobox-day10-bottom" class="info-box" contenteditable="true">{{ get_infobox_content('infobox-day10-bottom', "<p>📝 <strong>주의할 점:</strong> 날씨 안 좋으면 에귀디미디 다음날 방문</p>") }}</div>
+      </div>
+      <!-- Day 11 -->
+      <div id="day11" class="tab-content">
+        <h2>1️⃣1️⃣일차: 샤모니</h2>
+        <div id="infobox-day11-top" class="info-box" contenteditable="true">{{ get_infobox_content('infobox-day11-top', "<p>🏨 <strong>숙소:</strong> 샤모니 숙소</p>") }}</div>
+        <div class="editable-plan" contenteditable="true">{{ get_plan_content('day11') }}</div>
+      </div>
+      <!-- Day 12 -->
+      <div id="day12" class="tab-content">
+        <h2>1️⃣2️⃣일차: 샤모니, 리옹 & 출국</h2>
+        <div id="infobox-day12-top" class="info-box" contenteditable="true">{{ get_infobox_content('infobox-day12-top', "<p>🏨 <strong>숙소:</strong> 체크아웃</p>") }}</div>
+        <div class="editable-plan" contenteditable="true">{{ get_plan_content('day12') }}</div>
+      </div>
+    
+      <!-- Expenses Tab -->
+      <div id="expenses" class="tab-content">
+        <h2>💰 여행 경비 총정리</h2>
+        <table class="expense-table" id="expense-table">
+            <thead><tr><th>카테고리</th><th>날짜</th><th>내용</th><th>금액 (€)</th><th>삭제</th></tr></thead>
+            <tbody></tbody>
+        </table>
+        <button class="add-btn" id="add-expense-btn">+ 내역 추가</button>
+        <div class="summary">
+            <h3>📊 경비 요약</h3>
+            <p><strong>숙소:</strong> <span id="total-숙소">0</span> € | <strong>식사:</strong> <span id="total-식사">0</span> € | <strong>쇼핑:</strong> <span id="total-쇼핑">0</span> € | <strong>교통:</strong> <span id="total-교통">0</span> € | <strong>기타:</strong> <span id="total-기타">0</span> €</p><hr>
+            <h3>✨ 총 사용 경비: <span id="total-expenses">0</span> €</h3>
+        </div>
+      </div>
+</div>
+
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const tabContainer = document.getElementById('tab-container');
+    if (tabContainer) {
+        tabContainer.addEventListener('click', (e) => {
+            const clickedTab = e.target.closest('.tab-button');
+            if (!clickedTab) return;
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            clickedTab.classList.add('active');
+            const contentToShow = document.getElementById(clickedTab.dataset.tab);
+            if (contentToShow) contentToShow.classList.add('active');
+        });
+    }
+
+    const socket = io();
+    const initialExpenses = {{ expenses | tojson | safe }};
+    const initialInfoBoxes = {{ infoboxes | tojson | safe }};
+
+    initialInfoBoxes.forEach(box => {
+        const boxEl = document.getElementById(box.box_id);
+        if (boxEl) boxEl.innerHTML = box.content;
+    });
+    
+    function addExpenseRow(data = {}) {
+        const expenseTableBody = document.querySelector('#expense-table tbody');
+        if (!expenseTableBody) return;
+        const row = document.createElement('tr');
+        row.dataset.id = data.id;
+        row.innerHTML = `<td><select><option ${data.category === '숙소' ? 'selected' : ''}>숙소</option><option ${data.category === '식사' || !data.category ? 'selected' : ''}>식사</option><option ${data.category === '쇼핑' ? 'selected' : ''}>쇼핑</option><option ${data.category === '교통' ? 'selected' : ''}>교통</option><option ${data.category === '기타' ? 'selected' : ''}>기타</option></select></td><td><input type="date" value="${data.date || ''}"></td><td><input type="text" placeholder="내용" value="${data.content || ''}"></td><td><input type="number" placeholder="0.00" step="0.01" value="${data.amount || ''}"></td><td><button class="delete-btn">삭제</button></td>`;
+        expenseTableBody.appendChild(row);
+    }
+    
+    function updateTotals() {
+        const expenseTableBody = document.querySelector('#expense-table tbody');
+        if (!expenseTableBody) return;
+        let total = 0;
+        const categoryTotals = { '숙소': 0, '식사': 0, '쇼핑': 0, '교통': 0, '기타': 0 };
+        expenseTableBody.querySelectorAll('tr').forEach(row => {
+            const category = row.querySelector('select').value;
+            const amount = parseFloat(row.querySelector('input[type="number"]').value) || 0;
+            if (categoryTotals.hasOwnProperty(category)) categoryTotals[category] += amount;
+            total += amount;
+        });
+        for (const category in categoryTotals) {
+            const totalEl = document.getElementById(`total-${category}`);
+            if(totalEl) totalEl.textContent = categoryTotals[category].toFixed(2);
+        }
+        const totalExpensesEl = document.getElementById('total-expenses');
+        if(totalExpensesEl) totalExpensesEl.textContent = total.toFixed(2);
+    }
+
+    initialExpenses.forEach(expense => addExpenseRow(expense));
+    updateTotals();
+    
+    socket.on('plan_was_updated', (data) => {
+        const planEl = document.querySelector(`#${data.dayId} .editable-plan`);
+        if (planEl && document.activeElement !== planEl) planEl.innerHTML = data.content;
+    });
+    socket.on('infobox_was_updated', (data) => {
+        const boxEl = document.getElementById(data.boxId);
+        if (boxEl && document.activeElement !== boxEl) boxEl.innerHTML = data.content;
+    });
+    socket.on('expense_was_added', (data) => {
+        addExpenseRow(data);
+        updateTotals();
+    });
+    socket.on('expense_was_updated', (data) => {
+        const row = document.querySelector(`#expense-table tbody tr[data-id='${data.id}']`);
+        if (row) {
+            row.querySelector('select').value = data.category;
+            row.querySelector('input[type="date"]').value = data.date;
+            row.querySelector('input[type="text"]').value = data.content;
+            row.querySelector('input[type="number"]').value = data.amount;
+            updateTotals();
+        }
+    });
+    socket.on('expense_was_deleted', (data) => {
+        const expenseTableBody = document.querySelector('#expense-table tbody');
+        if (!expenseTableBody) return;
+        const rowToDelete = expenseTableBody.querySelector(`tr[data-id='${data.id}']`);
+        if (rowToDelete) {
+            rowToDelete.remove();
+            updateTotals();
+        }
+    });
+
+    document.querySelectorAll('[contenteditable="true"]').forEach(element => {
+        let timeout;
+        element.addEventListener('input', () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                if (element.classList.contains('editable-plan')) {
+                    socket.emit('update_plan', { dayId: element.closest('.tab-content').id, content: element.innerHTML });
+                } else if (element.classList.contains('info-box')) {
+                    socket.emit('update_infobox', { boxId: element.id, content: element.innerHTML });
+                }
+            }, 500);
+        });
+    });
+
+    const addExpenseBtn = document.getElementById('add-expense-btn');
+    if (addExpenseBtn) {
+        addExpenseBtn.addEventListener('click', () => socket.emit('add_expense', { category: '식사' }));
+    }
+
+    const expenseTableBody = document.querySelector('#expense-table tbody');
+    if (expenseTableBody) {
+        expenseTableBody.addEventListener('click', (e) => {
+            if (e.target.classList.contains('delete-btn')) {
+                const row = e.target.closest('tr');
+                if (row && row.dataset.id) socket.emit('delete_expense', { id: row.dataset.id });
+            }
+        });
+        let expenseTimeout;
+        expenseTableBody.addEventListener('input', (e) => {
+            updateTotals();
+            const row = e.target.closest('tr');
+            if (!row || !row.dataset.id) return;
+            clearTimeout(expenseTimeout);
+            expenseTimeout = setTimeout(() => {
+                const expenseData = {
+                    id: row.dataset.id,
+                    category: row.querySelector('select').value,
+                    date: row.querySelector('input[type="date"]').value,
+                    content: row.querySelector('input[type="text"]').value,
+                    amount: row.querySelector('input[type="number"]').value,
+                };
+                socket.emit('update_expense', expenseData);
+            }, 750);
+        });
+    }
+});
+</script>
+</body>
+</html>
